@@ -10,12 +10,18 @@ public class PlayerMovement : MonoBehaviour
     public float fallThreshold = 1f;
 
     private ScoreManager scoreManager;
+    public GameObject gameOverPanel;
     private bool isGameOver = false;
 
     void Start()
     {
         scoreManager = FindObjectOfType<ScoreManager>();
         speed = 3f;
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -50,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void GameOver()
     {
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
         Debug.Log("Game Over");
     }
 }
