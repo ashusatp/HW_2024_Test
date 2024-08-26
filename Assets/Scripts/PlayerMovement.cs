@@ -13,6 +13,15 @@ public class PlayerMovement : MonoBehaviour
     public GameObject gameOverPanel;
     private bool isGameOver = false;
 
+    AudioController audioController;
+
+
+    private void Awake()
+    {
+        audioController = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioController>();
+    }
+
+
     void Start()
     {
         scoreManager = FindObjectOfType<ScoreManager>();
@@ -44,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.y < fallThreshold && !isGameOver)
         {
             isGameOver = true;
+            audioController.PlaySFX(audioController.death);
+            audioController.stopBackgroundMusic();
             GameOver();
         }
 
