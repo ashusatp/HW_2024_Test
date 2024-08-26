@@ -7,24 +7,26 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed;
     private HashSet<Collider> visitedPulpits = new HashSet<Collider>();
-
+    public float fallThreshold = 1f;
 
     private ScoreManager scoreManager;
+    private bool isGameOver = false;
+
     void Start()
     {
         scoreManager = FindObjectOfType<ScoreManager>();
-        speed = 3.0f;
+        speed = 3f;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // Check if the object Doofus collided with has the "Pulpit" tag
         if (other.CompareTag("Pulpit"))
         {
-            // Check if the Pulpit has been visited before
+            BoxCollider platformCollider = other.GetComponent<BoxCollider>();
+            platformCollider.isTrigger = false;
+
             if (!visitedPulpits.Contains(other))
             {
-                // Update the score and mark this Pulpit as visited
                 scoreManager.IncrementScore();
                 visitedPulpits.Add(other);
             }
@@ -33,10 +35,21 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < fallThreshold && !isGameOver)
+        {
+            isGameOver = true;
+            GameOver();
+        }
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         transform.Translate(movement * speed * Time.deltaTime);
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over");
     }
 }

@@ -10,6 +10,7 @@ public class StartGame : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+
     public void QuitGame()
     {
         Application.Quit();
